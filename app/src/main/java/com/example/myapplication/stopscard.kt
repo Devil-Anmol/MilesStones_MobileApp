@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -53,11 +55,15 @@ fun MainScreen(
             fontWeight = FontWeight.Black
         )
         Spacer(modifier = Modifier.height(10.dp))
-        Button(onClick = onSevenStopsClicked, modifier = Modifier.width(105.dp).height(40.dp)) {
+        Button(onClick = onSevenStopsClicked, modifier = Modifier
+            .width(105.dp)
+            .height(40.dp)) {
             Text(text = "7 Stops")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onFifteenStopsClicked, modifier = Modifier.width(105.dp).height(40.dp)) {
+        Button(onClick = onFifteenStopsClicked, modifier = Modifier
+            .width(105.dp)
+            .height(40.dp)) {
             Text(text = "15 Stops")
         }
     }
@@ -143,31 +149,41 @@ fun SevenStopsScreen() {
 
         // List of 7 stops
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-
+            modifier = Modifier.fillMaxSize()
         ) {
-            StopCard(stopName = "Start", isCurrentStop = currentStopIndex==0,0)
-            repeat(6) { index ->
-                StopCard(
-                    stopName = "Stop ${index + 1}",
-                    isCurrentStop = index == currentStopIndex - 1,
-                    num[index]
-                )
+
+            Column(
+                modifier = Modifier.weight(0.5f),
+                horizontalAlignment = Alignment.CenterHorizontally
+
+            ) {
+                StopCard(stopName = "Start", isCurrentStop = currentStopIndex == 0, 0)
+                repeat(6) { index ->
+                    StopCard(
+                        stopName = "Stop ${index + 1}",
+                        isCurrentStop = index == currentStopIndex - 1,
+                        num[index]
+                    )
+                }
+                StopCard(stopName = "Destination", isCurrentStop = currentStopIndex == 7, num[6])
             }
-            StopCard(stopName = "Destination", isCurrentStop = currentStopIndex==7,num[6])
-        }
-        Spacer(modifier = Modifier.height(5.dp))
-        Button(onClick = {
-            currentStopIndex++;
-            progress+=num[currentStopIndex-1];
-            distanceInKms+=num[currentStopIndex-1];
-            distanceInMiles = distanceInKms * 1.6f;
-            distancelrftInKms = sum - distanceInKms;
-            distanceleftInMiles = sum*1.6f - distanceInMiles;
-            // Handle Next Stop click and update state
-        }, enabled = currentStopIndex<7) {
-            Text(text = "Next Stop")
+//        Spacer(modifier = Modifier.height(5.dp))
+            Button(onClick = {
+                currentStopIndex++;
+                progress += num[currentStopIndex - 1];
+                distanceInKms += num[currentStopIndex - 1];
+                distanceInMiles = distanceInKms * 1.6f;
+                distancelrftInKms = sum - distanceInKms;
+                distanceleftInMiles = sum * 1.6f - distanceInMiles;
+                // Handle Next Stop click and update state
+            }, enabled = currentStopIndex < 7, modifier = Modifier
+                .width(130.dp)
+                .height(8.dp)
+                .weight(0.060f)
+                .align(Alignment.CenterHorizontally)) {
+                Text(text = "Next Stop")
+            }
+            Spacer(modifier = Modifier.height(70.dp))
         }
     }
 }
@@ -312,8 +328,8 @@ fun FifteenStopsScreen() {
 
 @Composable
 fun StopCard(stopName: String, isCurrentStop: Boolean = false,dist: Int) {
-    val backgroundColor = if (isCurrentStop) Color.LightGray else Color.White
-    val contentColor = if (isCurrentStop) Color.Black else Color.Gray
+    val backgroundColor = if (isCurrentStop) Color(0xffffb49c) else Color.LightGray
+    val contentColor = if (isCurrentStop) Color.Black else Color.White
     var m: Float = dist*1.6f
 
     Card(
@@ -322,6 +338,9 @@ fun StopCard(stopName: String, isCurrentStop: Boolean = false,dist: Int) {
             .padding(8.dp)
             .height(60.dp)
             .background(color = backgroundColor),
+        colors = CardDefaults.cardColors(
+            containerColor = backgroundColor
+        )
 //        elevation = CardElevation(4.dp)
     ) {
         Text(
