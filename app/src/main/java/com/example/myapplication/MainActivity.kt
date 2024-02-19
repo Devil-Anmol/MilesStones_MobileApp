@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 //                    WaterCounter();
                     AppNavigator();
 //                    Greeting(
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
 //                    )
 //                    display("kms")
 
-                }
+//                }
             }
         }
     }

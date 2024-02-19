@@ -26,8 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -44,11 +47,17 @@ fun MainScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = onSevenStopsClicked) {
+        Text(
+            "Miles Stones",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Black
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Button(onClick = onSevenStopsClicked, modifier = Modifier.width(105.dp).height(40.dp)) {
             Text(text = "7 Stops")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onFifteenStopsClicked) {
+        Button(onClick = onFifteenStopsClicked, modifier = Modifier.width(105.dp).height(40.dp)) {
             Text(text = "15 Stops")
         }
     }
@@ -61,8 +70,10 @@ fun SevenStopsScreen() {
     var progress by remember { mutableStateOf(0f) }
     var currentStopIndex by remember { mutableStateOf(0) }
     val num = arrayOf(10,20,30,25,16,24,35);
-    val sum = 150
+    val sum = 160
     var checked by remember { mutableStateOf(true) }
+    var distancelrftInKms by remember { mutableStateOf(sum*1f) }
+    var distanceleftInMiles by remember { mutableStateOf(sum*1.6f) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -76,21 +87,43 @@ fun SevenStopsScreen() {
             modifier = Modifier.padding(12.dp)
         ){
             if(checked) {
-                Text(
-                    "Total Distance: $distanceInKms km",
-                    modifier = Modifier
-                        .weight(0.7f)
-                        .align(Alignment.CenterVertically)
-                )
+                Column(
+                    modifier = Modifier.height(40.dp)
+                ) {
+                    Text(
+                        "Total Distance: $distanceInKms km",
+                        modifier = Modifier
+//                            .weight(0.5f)
+//                            .align(Alignment.CenterVertically)
+//                            .align(Alignment.CenterVertically)
+                    )
+                    Text(
+                        "Total Distance left : $distancelrftInKms km",
+                        modifier = Modifier
+//                            .weight(0.5f)
+//                            .align(Alignment.CenterVertically)
+//                            .align(Alignment.CenterVertically)
+                    )
+                }
             }
             else {
+                Column(
+                    modifier = Modifier.height(40.dp)
+                ) {
 
-                Text(
-                "Total Distance: $distanceInMiles miles",
-                modifier = Modifier
-                    .weight(0.7f)
-                    .align(Alignment.CenterVertically)
-                )
+                    Text(
+                        "Total Distance: $distanceInMiles miles",
+                        modifier = Modifier
+//                            .weight(0.7f)
+//                            .align(Alignment.CenterVertically)
+                    )
+                    Text(
+                        "Total Distance left: $distanceleftInMiles miles",
+                        modifier = Modifier
+//                            .weight(0.7f)
+//                            .align(Alignment.CenterVertically)
+                    )
+                }
             }
             Switch(
                 checked = checked,
@@ -130,6 +163,8 @@ fun SevenStopsScreen() {
             progress+=num[currentStopIndex-1];
             distanceInKms+=num[currentStopIndex-1];
             distanceInMiles = distanceInKms * 1.6f;
+            distancelrftInKms = sum - distanceInKms;
+            distanceleftInMiles = sum*1.6f - distanceInMiles;
             // Handle Next Stop click and update state
         }, enabled = currentStopIndex<7) {
             Text(text = "Next Stop")
@@ -146,6 +181,8 @@ fun FifteenStopsScreen() {
     val num = arrayOf(10, 20, 30, 25, 16, 24, 35, 18, 22, 27, 21, 29, 33, 26, 19)
     val sum = 355
     var checked by remember { mutableStateOf(true) }
+    var distanceleftInKms by remember { mutableStateOf(sum*1f) }
+    var distanceleftInMiles by remember { mutableStateOf(sum*1.6f) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -159,19 +196,42 @@ fun FifteenStopsScreen() {
             modifier = Modifier.padding(12.dp)
         ) {
             if (checked) {
-                Text(
-                    "Total Distance: $distanceInKms km",
-                    modifier = Modifier
-                        .weight(0.7f)
-                        .align(Alignment.CenterVertically)
-                )
+                Column(
+                    modifier = Modifier.height(40.dp)
+                ) {
+
+                    Text(
+                        "Total Distance: $distanceInKms km",
+                        modifier = Modifier
+//                            .weight(0.7f)
+//                            .align(Alignment.CenterVertically)
+                    )
+                    Text(
+                        "Total Distance left: $distanceleftInKms km",
+                        modifier = Modifier
+//                        .weight(0.7f)
+//                        .align(Alignment.CenterVertically)
+                    )
+                }
             } else {
-                Text(
-                    "Total Distance: $distanceInMiles miles",
-                    modifier = Modifier
-                        .weight(0.7f)
-                        .align(Alignment.CenterVertically)
-                )
+                Column (
+                    modifier = Modifier.height(40.dp)
+                ) {
+
+                    Text(
+                        "Total Distance: $distanceInMiles miles",
+                        modifier = Modifier
+//                            .weight(0.7f)
+//                            .align(Alignment.CenterVertically)
+                    )
+                    Text(
+                        "Total Distance left: $distanceleftInMiles miles",
+                        modifier = Modifier
+//                            .weight(0.7f)
+//                            .align(Alignment.CenterVertically)
+                    )
+                }
+
             }
             Switch(
                 checked = checked,
@@ -231,10 +291,12 @@ fun FifteenStopsScreen() {
                         .padding(2.dp)
                         .align(Alignment.CenterHorizontally),
                     onClick = {
-                        currentStopIndex++
-                        progress += num[currentStopIndex - 1]
-                        distanceInKms += num[currentStopIndex - 1]
-                        distanceInMiles = distanceInKms * 1.6f
+                        currentStopIndex++;
+                        progress += num[currentStopIndex - 1];
+                        distanceInKms += num[currentStopIndex - 1];
+                        distanceInMiles = distanceInKms * 1.6f;
+                        distanceleftInKms = sum - distanceInKms;
+                        distanceleftInMiles = sum*1.6f - distanceInMiles;
                         // Handle Next Stop click and update state
                     },
                     enabled = currentStopIndex < 15
